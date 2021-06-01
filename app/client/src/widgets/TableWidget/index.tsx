@@ -559,7 +559,10 @@ class TableWidget extends BaseWidget<TableWidgetProps, WidgetState> {
       this.updateSelectedRowIndex();
     }
 
-    if (this.props.pageSize !== prevProps.pageSize) {
+    if (
+      this.props.pageSize !== prevProps.pageSize ||
+      this.props.defaultPageSize !== prevProps.defaultPageSize
+    ) {
       if (this.props.onPageSizeChange) {
         super.executeAction({
           triggerPropertyName: "onPageSizeChange",
@@ -619,9 +622,8 @@ class TableWidget extends BaseWidget<TableWidgetProps, WidgetState> {
       : this.props.pageSize;
 
     const { filteredTableData = [] } = this.props;
-    const tableColumns = this.getTableColumns() || [];
-    const transformedData = this.transformData(filteredTableData, tableColumns);
-    const { componentHeight, componentWidth } = this.getComponentDimensions();
+
+    const newFilteredData = [...filteredTableData];
 
     // Handled Table Data .....................................
     if (this.props.defaultPageSize && this.props.totalRecordCount) {
@@ -632,7 +634,32 @@ class TableWidget extends BaseWidget<TableWidgetProps, WidgetState> {
         const count =
           this.props.totalRecordCount -
           (this.props.pageNo - 1) * this.props.defaultPageSize;
-        transformedData.splice(count, transformedData.length);
+
+        newFilteredData.splice(count, newFilteredData.length);
+      }
+    }
+
+    // Manage defaultPageSize data .....................................
+    if (this.props.defaultPageSize && this.props.totalRecordCount) {
+      if (newFilteredData.length > this.props.defaultPageSize) {
+        newFilteredData.splice(
+          this.props.defaultPageSize,
+          newFilteredData.length,
+        );
+      }
+    }
+
+    const tableColumns = this.getTableColumns() || [];
+    const transformedData = this.transformData(newFilteredData, tableColumns);
+    const { componentHeight, componentWidth } = this.getComponentDimensions();
+
+    // Manage Page Number .............................................
+    if (this.props.defaultPageSize && this.props.totalRecordCount) {
+      const maxAllowedPageNumber = Math.ceil(
+        this.props.totalRecordCount / this.props.defaultPageSize,
+      );
+      if (this.props.pageNo > maxAllowedPageNumber) {
+        this.props.updateWidgetMetaProperty("pageNo", maxAllowedPageNumber);
       }
     }
 
@@ -814,7 +841,7 @@ class TableWidget extends BaseWidget<TableWidgetProps, WidgetState> {
 
   handleNextPageClick = () => {
     let pageNo = this.props.pageNo || 1;
-    // Handle Server Side Pagination ................................
+    // Handle Pagination ................................
     if (
       this.props.defaultPageSize &&
       this.props.pageNo &&
