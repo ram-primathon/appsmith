@@ -85,7 +85,132 @@ describe("Test Create Api and Bind to Table widget", function() {
     cy.ValidatePaginateResponseUrlData(apiPage.apiPaginationPrevTest);
     cy.PublishtheApp();
     cy.ValidatePaginationInputData();
-    cy.get(publishPage.backToEditor).click({ force: true });
+    cy.get(publishPage.backToEditor).click({
+      force: true,
+    });
     cy.ValidatePaginateResponseUrlData(apiPage.apiPaginationNextTest);
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.wait(5000);
   });
+
+  it("Table-Text, Validate Server Side Pagination of Paginate with Table Default Page Size and Total Record Count", function() {
+    cy.callApi("Api1");
+
+    cy.SearchEntityandOpen("Table1");
+
+    /**Bind Api1 with Table widget */
+    cy.testJsontext("tabledata", "{{Api1.data.users}}");
+    cy.CheckWidgetProperties(commonlocators.serverSidePaginationCheckbox);
+
+    cy.get(commonlocators.tablePageSizeChangeAction).click({
+      force: true,
+    });
+
+    cy.wait(300);
+
+    cy.get(commonlocators.chooseAction)
+      .children()
+      .contains("Call An API")
+      .click();
+
+    cy.wait(300);
+
+    cy.get(commonlocators.chooseAction)
+      .children()
+      .contains("Api1")
+      .click();
+
+    // Add value of default page count and total page count
+    cy.testJsontext("totalrecordcount", 20);
+    cy.testJsontext("defaultpagesize", 5);
+
+    cy.wait("@postExecute").should(
+      "have.nested.property",
+      "response.body.responseMeta.status",
+      200,
+    );
+
+    /**Validate Table data on current page(page1) */
+    cy.ValidateTableData("1");
+
+    cy.get(commonlocators.tableNextPage).click({
+      force: true,
+    });
+    cy.wait("@postExecute").should(
+      "have.nested.property",
+      "response.body.responseMeta.status",
+      200,
+    );
+    cy.wait(300);
+
+    cy.ValidateTableData("11");
+
+    /**Validate Table data on current page(page2) */
+    cy.get(commonlocators.tableNextPage).click({
+      force: true,
+    });
+    cy.wait("@postExecute").should(
+      "have.nested.property",
+      "response.body.responseMeta.status",
+      200,
+    );
+    cy.wait(300);
+
+    cy.ValidateTableData("21");
+
+    cy.testJsontext("totalrecordcount", 8);
+    cy.wait(300);
+
+    cy.readTabledata("2", "0").then((tabData) => {
+      const tableData = tabData;
+      expect(tableData).to.equal("23");
+    });
+
+    // cy.get(commonlocators.tableNextPage).should("be.disabled");
+    cy.get(commonlocators.tableNextPage).should("have.attr", "disabled");
+  });
+
+  // it("Table-Text, Validate of Paginate with Table Default Page Size and Total Record Count", function() {
+  //   cy.SearchEntityandOpen("Table1");
+
+  //   /**Bind Api1 with Table widget */
+  //   cy.testJsontext("tabledata", "{{Api1.data.users}}");
+  //   cy.UncheckWidgetProperties(commonlocators.serverSidePaginationCheckbox);
+
+  //   cy.get(commonlocators.tablePageSizeChangeAction).click({
+  //     force: true,
+  //   });
+
+  //   cy.wait(300);
+
+  //   cy.get(commonlocators.chooseAction)
+  //     .children()
+  //     .contains("Call An API")
+  //     .click();
+
+  //   cy.wait(300);
+
+  //   cy.get(commonlocators.chooseAction)
+  //     .children()
+  //     .contains("Api1")
+  //     .click();
+
+  //   // Add value of default page count and total page count
+  //   cy.testJsontext("totalrecordcount", 20);
+  //   cy.testJsontext("defaultpagesize", 5);
+
+  //   /**Validate Table data on current page(page1) */
+  //   cy.ValidateTableData("1");
+
+  //   cy.get(commonlocators.tableNextPage).click({
+  //     force: true,
+  //   });
+
+  //   cy.testJsontext("defaultpagesize", 17);
+
+  //   cy.readTabledata("3", "0").then((tabData) => {
+  //     const tableData = tabData;
+  //     expect(tableData).to.equal("8");
+  //   });
+  // });
 });
