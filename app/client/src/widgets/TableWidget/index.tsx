@@ -616,10 +616,16 @@ class TableWidget extends BaseWidget<TableWidgetProps, WidgetState> {
   };
 
   getPageView() {
+    console.log("###: props => ", this.props);
+
     // Manage Page Size .......................................
     const pageSize = this.props.defaultPageSize
       ? this.props.defaultPageSize
       : this.props.pageSize;
+
+    console.log("###: pageSize => ", pageSize);
+
+    console.log("###: getEmptyRow => ", this.getEmptyRow());
 
     const { filteredTableData = [] } = this.props;
 
@@ -652,6 +658,17 @@ class TableWidget extends BaseWidget<TableWidgetProps, WidgetState> {
     const tableColumns = this.getTableColumns() || [];
     const transformedData = this.transformData(newFilteredData, tableColumns);
     const { componentHeight, componentWidth } = this.getComponentDimensions();
+
+    // Add Empty Data to the table ......................
+    const emptyShellConut = this.props.pageSize - filteredTableData.length;
+    if (emptyShellConut > 0 && JSON.stringify(this.getEmptyRow()) !== "{}") {
+      const emptyData = [];
+      for (let i = 0; i < emptyShellConut; i++) {
+        const data = this.getEmptyRow();
+        emptyData.push(data);
+      }
+      transformedData.push(...emptyData);
+    }
 
     // Manage Page Number .............................................
     if (this.props.defaultPageSize && this.props.totalRecordCount) {
