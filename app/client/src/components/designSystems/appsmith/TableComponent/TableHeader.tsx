@@ -43,6 +43,19 @@ const PageNumberInputWrapper = styled(NumericInput)`
   margin: 0 8px;
 `;
 
+// if (
+//   this.props.defaultPageSize &&
+//   this.props.pageNo &&
+//   this.props.totalRecordCount
+// ) {
+//   const isNextClickValid =
+//     this.props.defaultPageSize * this.props.pageNo <
+//     this.props.totalRecordCount;
+//   if (!isNextClickValid) {
+//     return;
+//   }
+// }
+
 function PageNumberInput(props: {
   pageNo: number;
   pageCount: number;
@@ -141,7 +154,7 @@ function TableHeader(props: TableHeaderProps) {
         <PaginationWrapper>
           <PaginationItemWrapper
             className="t--table-widget-prev-page"
-            disabled={false}
+            disabled={props.pageNo === 0}
             onClick={() => {
               props.prevPageClick();
             }}
@@ -153,7 +166,7 @@ function TableHeader(props: TableHeaderProps) {
           </PaginationItemWrapper>
           <PaginationItemWrapper
             className="t--table-widget-next-page"
-            disabled={false}
+            disabled={props.pageNo === props.pageCount - 1}
             onClick={() => {
               props.nextPageClick();
             }}

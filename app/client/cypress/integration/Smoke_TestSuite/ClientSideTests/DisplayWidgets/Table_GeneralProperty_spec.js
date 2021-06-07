@@ -7,7 +7,7 @@ const dsl = require("../../../../fixtures/tableNewDsl.json");
 const pages = require("../../../../locators/Pages.json");
 const testdata = require("../../../../fixtures/testdata.json");
 
-describe("Table Widget property pane feature validation", function() {
+describe("Table Widget property pane pagination feature validation", function() {
   before(() => {
     cy.addDsl(dsl);
   });
