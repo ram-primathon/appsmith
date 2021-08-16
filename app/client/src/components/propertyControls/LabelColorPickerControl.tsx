@@ -45,15 +45,20 @@ class LabelColorPickerControl extends BaseControl<
   getLabels = () => {
     const { tableData } = this.props.widgetProperties.evaluatedValues;
     const columnName = this.props.propertyName.split(".")[1];
-    const labelsArray = tableData.map((row: any, index: number) => {
-      return row[columnName].split(",");
+    const labelsArray = tableData.map((row: any) => {
+      if (row[columnName]) {
+        return row[columnName].split(",");
+      }
     });
     const labelColors: any = {};
-    uniq(flatten(labelsArray)).forEach((label: any, index: number) => {
-      labelColors[label] = this.props.propertyValue
-        ? this.props.propertyValue[label]
-        : this.props.defaultColor;
-    });
+    uniq(flatten(labelsArray.filter((label: string[]) => label))).forEach(
+      (label: any) => {
+        const trimmedLabel = label.trim();
+        labelColors[trimmedLabel] = this.props.propertyValue
+          ? this.props.propertyValue[trimmedLabel]
+          : this.props.defaultColor;
+      },
+    );
     delete labelColors[""];
     this.setState({ labelColors });
   };

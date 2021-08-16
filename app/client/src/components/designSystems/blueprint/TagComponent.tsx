@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { ComponentProps } from "components/designSystems/appsmith/BaseComponent";
-import { Tag } from "@blueprintjs/core";
+import { Tag, Icon } from "@blueprintjs/core";
 import { BlueprintControlTransform } from "constants/DefaultTheme";
 
 const fontColor: { [key: string]: string } = {
@@ -21,6 +20,7 @@ const fontColor: { [key: string]: string } = {
   "#6272C8": "#FFFFFF",
   "#4F70FD": "#FFFFFF",
   "#F0F0F0": "#000000",
+  transparent: "#4B4848",
 };
 
 const TagContainer = styled.span<{ color?: string; size?: string }>`
@@ -33,6 +33,12 @@ const TagContainer = styled.span<{ color?: string; size?: string }>`
       background-color: ${(props) => (props.color ? props.color : "#EBEBEB")};
       padding: ${(props) => (props.size === "LARGE" ? "2px 7px" : "0px 6px")};
       min-height: 16px;
+      border: 1px solid
+        ${(props) =>
+          props.color !== "transparent" ? "transparent" : "#E8E8E8"};
+    }
+    .bp3-icon {
+      vertical-align: middle;
     }
   }
   ${BlueprintControlTransform}
@@ -42,6 +48,9 @@ export class TagComponent extends React.Component<TagComponentProps> {
     return (
       <TagContainer color={this.props.color} size={this.props.tagSize}>
         <Tag large={this.props.tagSize === "LARGE"} round>
+          {this.props.type === "HELP" && (
+            <Icon color="#343434" icon="help" iconSize={11} />
+          )}{" "}
           {this.props.label}
         </Tag>
       </TagContainer>
@@ -53,4 +62,5 @@ export interface TagComponentProps {
   tagSize?: string;
   color?: string;
   label?: string;
+  type?: "COMMON" | "HELP";
 }

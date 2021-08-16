@@ -650,7 +650,7 @@ export default [
                     },
                   ],
                   defaultValue: "Small",
-                  // updateHook: updateDerivedColumnsHook,
+                  updateHook: updateDerivedColumnsHook,
                   isBindProperty: false,
                   isTriggerProperty: false,
                 },
