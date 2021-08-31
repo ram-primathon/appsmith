@@ -79,7 +79,10 @@ class LabelColorPickerControl extends BaseControl<
       <div>
         {this.state.labelColors &&
           Object.keys(this.state.labelColors).map((label, index) => (
-            <LabelColorPickerWrapper key={index}>
+            <LabelColorPickerWrapper
+              className={`t--label-colorpicker-${index}`}
+              key={index}
+            >
               <ColorPickerComponent
                 changeColor={(color) => this.handleChangeColor(color, label)}
                 color={this.state.labelColors[label] || this.props.defaultColor}

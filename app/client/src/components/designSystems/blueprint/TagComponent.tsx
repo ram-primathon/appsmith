@@ -47,7 +47,7 @@ export class TagComponent extends React.Component<TagComponentProps> {
   render() {
     return (
       <TagContainer color={this.props.color} size={this.props.tagSize}>
-        <Tag large={this.props.tagSize === "LARGE"} round>
+        <Tag className="t--label" large={this.props.tagSize === "LARGE"} round>
           {this.props.type === "HELP" && (
             <Icon color="#343434" icon="help" iconSize={11} />
           )}{" "}

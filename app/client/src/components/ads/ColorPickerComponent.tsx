@@ -100,7 +100,7 @@ function ColorBoard(props: ColorBoardProps) {
     <ColorsWrapper>
       {props.colorList.map((color: string, index: number) => (
         <ColorTab
-          className={Classes.POPOVER_DISMISS}
+          className={`${Classes.POPOVER_DISMISS} t--colortab-${index}`}
           color={color}
           key={index}
           onClick={() => props.selectColor(color)}
