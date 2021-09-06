@@ -124,7 +124,7 @@ class ComputeTablePropertyControl extends BaseControl<
         errorMessage={validationMessage}
         expected={expected}
         isValid={isValid}
-        label={label}
+        label={label || ""}
         onChange={this.onTextChange}
         theme={theme}
         value={value}

@@ -109,5 +109,7 @@
   "paginationButton": ".rc-pagination-item",
   "switchWidgetActive": ".t--switch-widget-active",
   "switchWidgetInActive": ".t--switch-widget-inactive",
-  "switchWidgetLoading": ".t--switch-widget-loading"
+  "switchWidgetLoading": ".t--switch-widget-loading",
+  "enableColorOption": ".t--property-control-coloredoptions input[type='checkbox']",
+  "labelColorPicker": ".t--property-pane-section-tagcolors .t--label-colorpicker-0 .bp3-popover-target"
 }

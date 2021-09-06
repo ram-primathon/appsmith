@@ -539,3 +539,15 @@ export const MenuCategoryWrapper = styled.div`
 export const MenuStyledOptionHeader = styled.div`
   font-weight: 600;
 `;
+
+export const TagWrapper = styled.div<{
+  cellProperties: CellLayoutProperties;
+}>`
+  padding: 0px 10px;
+  display: flex;
+  ${TableStyles}
+
+  span.bp3-popover-target {
+    display: inline-block;
+  }
+`;

@@ -721,6 +721,16 @@ Cypress.Commands.add("changeColumnType", (dataType) => {
     */
 });
 
+Cypress.Commands.add("enableColorOption", () => {
+  cy.get(commonlocators.enableColorOption)
+    .check({ force: true })
+    .should("be.checked");
+});
+
+Cypress.Commands.add("openLabelColorPicker", () => {
+  cy.get(commonlocators.labelColorPicker).click();
+});
+
 Cypress.Commands.add(
   "EnterSourceDetailsWithHeader",
   (baseUrl, v1method, hKey, hValue) => {
@@ -2347,8 +2357,12 @@ Cypress.Commands.add("assertPageSave", () => {
 
 Cypress.Commands.add("ValidateQueryParams", (param) => {
   cy.xpath(apiwidget.paramsTab)
-      .should("be.visible")
-      .click({ force: true });
-  cy.xpath(apiwidget.paramKey).first().contains(param.key);
-  cy.xpath(apiwidget.paramValue).first().contains(param.value);
+    .should("be.visible")
+    .click({ force: true });
+  cy.xpath(apiwidget.paramKey)
+    .first()
+    .contains(param.key);
+  cy.xpath(apiwidget.paramValue)
+    .first()
+    .contains(param.value);
 });
